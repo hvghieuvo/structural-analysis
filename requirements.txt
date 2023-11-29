@@ -11,3 +11,6 @@ matplotlib
 sectionproperties
 streamlit-option-menu
 streamlit-marquee
+pillow
+seaborn
+scikit-learn

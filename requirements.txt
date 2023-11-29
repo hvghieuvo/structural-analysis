@@ -1,0 +1,13 @@
+altair
+numpy
+pandas
+pydeck
+streamlit
+kaleido==0.1.*
+openpyxl
+indeterminatebeam
+sympy
+matplotlib
+sectionproperties
+streamlit-option-menu
+streamlit-marquee

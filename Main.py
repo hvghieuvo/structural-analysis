@@ -20,7 +20,7 @@ LOGGER = get_logger(__name__)
 
 def run():
     st.set_page_config(
-        page_title="Beam sus",
+        page_title="Structural sus",
         page_icon="🙂",
     )
 
@@ -30,10 +30,9 @@ def run():
     st.markdown("---")
     st.markdown(
         """
-        ### This app is a project by my team at HCMUT.
         ### STILL UNDER CONSTRUCTION!!!
         **👈 Select from the sidebar** to choose a tool
-        ### Check out our source code in [github](https://github.com/hvghieuvo/beam-analysis-python)
+        ### Check out source code in [github](https://github.com/hvghieuvo/structural-analysis)
     """
     )
     st.markdown("---")

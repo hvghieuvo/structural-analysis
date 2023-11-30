@@ -29,54 +29,94 @@ def app():
     if selected == "Implementation":
         st.subheader("Pseudocode")
         st.code('''
-                def linear_activation(x, a, b):
-                    return a * x + b
-
-                x = 2.0
-                a = 0.5
-                b = 1.0
-
-                output = linear_activation(x, a, b)
-                print(output)
-
+                beam = create_beam(10)
+                add_sp(0, "fixed")
+                add_sp(10, "pin")
+                add_sp(5, "roller")
+                add_load(2, -10, "pload")
+                add_load(7, -15, "dlv", 10)
+                add_load(5, 20, "ptorque")
+                lot_diagram(0)
+                plot_diagram(1)
                 ''')
         
     if selected == "Result":
-        # Define the linear activation function
-        def linear_activation(x, a, b):
-            return a * x + b
-
         # Streamlit app
-        st.subheader("Linear Activation Function Visualization")
+        st.header("Beam calculator input")
+        st.divider()
         col1,col2 = st.columns([1,2])
         # Sliders to adjust parameters
         with col1:
-            a = st.slider("Slope (a)", min_value=-5.0, max_value=5.0, step=0.1, value=1.0)
-            b = st.slider("Intercept (b)", min_value=-10.0, max_value=10.0, step=0.1, value=0.0)
+            beam_length = st.number_input("Insert beam length (m)", min_value=1, placeholder="Type a number...")
+            
+            on = st.toggle('Advance input')
+            if on:
+                E = st.number_input("Insert Young's Modulus", value=None, placeholder="Type a number...")
+                A = st.number_input("Insert Second Moment of Area", value=None, placeholder="Type a number...")
+                I = st.number_input("Insert Cross-Sectional Area", value=None, placeholder="Type a number...")
+            
             st.divider()
-           
-            thickness = st.slider("Select Line thickness", min_value=1, max_value=7, step=1, value=1)
-            colour = st.selectbox('Choose a colour for line',('blue','red','green','black'))
+            
+            st.subheader("Insert beam supports")
+            sp1 = st.text_input("Insert 1st support type", value=None, placeholder="Type a text...")
+            sp1_loc = st.slider("Support 1st location", min_value=0.0, max_value=float(beam_length), step=0.1)
+            
+            sp2 = st.text_input("Insert 2nd support type", value=None, placeholder="Type a text...")
+            sp2_loc = st.slider("Support 2nd location", min_value=0.0, max_value=float(beam_length), step=0.1)
+            
+            st.divider()
+
+            # st.subheader("Insert loads")
+            # load1 = st.number_input("Insert load type", value=None, placeholder="Type a text...")
+            # load1_mag = st.number_input("Insert magnitude", value=None, placeholder="Type a text...")
+            # load1_loc = st.slider("Load location", min_value=0.0, max_value=float(beam_length), step=0.1)
+
+            load_type = st.selectbox('Choose load type',('Point Load','Distributed Load','Point Torque'))
+            load_magnitude = st.number_input("Insert magnitude", value=None, placeholder="Type a number...")
+            load_location = st.slider("Load location", min_value=0.0, max_value=float(beam_length), step=0.1)
+
+            def add_load(load_list, load_container):
+                load_list.append({
+                    "type": load_type,
+                    "magnitude": load_magnitude,
+                    "location": load_location,
+                    "delete": False  # Thêm trường để kiểm soát việc xoá
+                })
+
+            # Khởi tạo danh sách để lưu trữ thông tin về các tải
+            loads = []
+
+            # Tạo khung nhập cho tải mới
+            load_container = st.empty()
+
+            # Hiển thị nút "Add load"
+            if st.button("Add load"):
+                # Tạo một ô trống mới để hiển thị khung nhập tiếp theo
+                st.session_state["load_magnitude"] = ""
+                # Gọi hàm add_load để thêm một khung nhập mới
+                add_load(loads, load_container)
+                load_container.text("Load added successfully!")
+
+            # Hiển thị thông tin tải đã thêm và nút để xoá
+            st.subheader("Added loads:")
+            for i, load in enumerate(loads, start=1):
+                delete_load = st.checkbox(f"Delete Load {i}")
+                
+                # Kiểm tra nếu nút xoá được chọn
+                if delete_load:
+                    loads[i - 1]["delete"] = True
+
+                # Hiển thị thông tin tải nếu không được chọn để xoá
+                if not loads[i - 1]["delete"]:
+                    st.write(f"Load {i}: Type - {load['type']}, Magnitude - {load['magnitude']}, Location - {load['location']}")
+
 
         with col2:
-            # Generate x values
-            x = np.linspace(-10, 10, 400)
             
-            # Calculate y values using the linear activation function
-            y = linear_activation(x, a, b)
-
-            # Plot the function
-            fig, ax = plt.subplots()
-            ax.plot(x, y,color=colour,linewidth=thickness)
-            ax.set_xlabel("Input (x)")
-            ax.set_ylabel("Output (f(x))")
-            ax.set_ylim(-10,10)
-            ax.set_title("Linear Activation Function")
-            plt.grid()
-
-            # Display the plot in Streamlit
-            st.pyplot(fig)
-
+            st.image('images/fig_beam.png', caption='Beam schematic')
+            st.divider()
+            st.image('images/fig_reac.png', caption='Beam reaction force diagram')
+            st.divider()
         
     if selected == "Inference":
         st.subheader("Merits:")

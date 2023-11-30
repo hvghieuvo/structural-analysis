@@ -39,6 +39,7 @@ def plot_diagram(x=0):
     if x == 0:
         #PLot beam schematic
         fig_beam = beam.plot_beam_diagram()
+        return fig_beam
         fig_beam.write_image("./images/fig_beam.png",format='png',engine='kaleido')
     else:
         #PLot beam schematic
@@ -68,5 +69,5 @@ add_sp(5, "roller")
 add_load(2, -10, "pload")
 add_load(7, -15, "dlv", 10)
 add_load(5, 20, "ptorque")
-
+plot_diagram(0)
 plot_diagram(1)

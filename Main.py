@@ -1,9 +1,5 @@
 import streamlit as st
-from streamlit.logger import get_logger
 from tabs import Test1, Test2, Test3, home
-
-LOGGER = get_logger(__name__)
-
 
 def run():
     st.set_page_config(

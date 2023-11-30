@@ -14,4 +14,3 @@ streamlit-marquee
 pillow
 seaborn
 scikit-learn
-Test1, Test2, Test3, home

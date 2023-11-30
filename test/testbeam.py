@@ -13,7 +13,7 @@ beam_2 = Beam(9, E=2000, I=10**6, A=3000)
 #========== End step 1 
 
 #========== Step 2: Define supports 
-
+   
 # Defines a pin support at location x = 5 m  
 a = Support(5, (1,1,0))      
 # Defines a roller support at location x = 0 m
@@ -21,7 +21,8 @@ b = Support(0, (0,1,0))
 # Defines a fixed support at location x = 7 m
 c = Support(7, (1,1,1))      
 # Assign the support objects to a beam object created earlier
-beam.add_supports(a,b,c)    
+beam.add_supports(Support(5, (1,1,0)))
+beam.add_supports(Support(0, (0,1,0)))
 
 #========== End step 2 
 
@@ -42,10 +43,20 @@ beam.add_loads(load_1,load_2,load_3)
 
 beam.analyse()  
 
-#PLot internal force diagram
-fig = beam.plot_beam_diagram()
+#PLot beam schematic
+fig_beam = beam.plot_beam_diagram()
+
+#PLot beam schematic
+fig_reac = beam.plot_reaction_force()
+
 #PLot normal force
-fig = beam.plot_normal_force()
+fig_normal = beam.plot_normal_force()
+
+#PLot shear force
+fig_shear = beam.plot_shear_force()
+
+#PLot bending moment
+fig_moment = beam.plot_bending_moment()
 
 #Show the input and free body diagram
 fig_1 = beam.plot_beam_external()
@@ -56,8 +67,6 @@ fig_2 = beam.plot_beam_internal()
 #Save result as png file
 fig_1.write_image("./images/fig1.png",format='png',engine='kaleido')
 fig_2.write_image("./images/fig2.png",format='png',engine='kaleido')
-
-# fig_2.write_image("./example_internal.png")
 
 #========== End step 4 
 

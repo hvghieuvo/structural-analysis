@@ -82,6 +82,11 @@ def app():
                     "location": load_location,
                     "delete": False  # Thêm trường để kiểm soát việc xoá
                 })
+                
+                # Tạo một ô trống mới để hiển thị khung nhập tiếp theo
+                st.session_state["load_magnitude"] = ""
+                
+                load_container.text("Load added successfully!")
 
             # Khởi tạo danh sách để lưu trữ thông tin về các tải
             loads = []
@@ -90,13 +95,8 @@ def app():
             load_container = st.empty()
 
             # Hiển thị nút "Add load"
-            if st.button("Add load"):
-                # Tạo một ô trống mới để hiển thị khung nhập tiếp theo
-                st.session_state["load_magnitude"] = ""
-                # Gọi hàm add_load để thêm một khung nhập mới
-                add_load(loads, load_container)
-                load_container.text("Load added successfully!")
-
+            st.button("Add load", on_click=add_load):
+                
             # Hiển thị thông tin tải đã thêm và nút để xoá
             st.subheader("Added loads:")
             for i, load in enumerate(loads, start=1):

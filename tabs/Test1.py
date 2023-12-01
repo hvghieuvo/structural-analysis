@@ -95,7 +95,7 @@ def app():
             load_container = st.empty()
 
             # Hiển thị nút "Add load"
-            st.button("Add load", on_click=add_load):
+            st.button("Add load", on_click=add_load)
                 
             # Hiển thị thông tin tải đã thêm và nút để xoá
             st.subheader("Added loads:")

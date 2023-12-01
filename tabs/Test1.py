@@ -90,12 +90,13 @@ def app():
 
             # Khởi tạo danh sách để lưu trữ thông tin về các tải
             loads = []
+            load_list = []
 
             # Tạo khung nhập cho tải mới
             load_container = st.empty()
 
             # Hiển thị nút "Add load"
-            st.button("Add load", on_click=add_load)
+            st.button("Add load", on_click=add_load())
                 
             # Hiển thị thông tin tải đã thêm và nút để xoá
             st.subheader("Added loads:")

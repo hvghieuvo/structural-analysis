@@ -71,45 +71,48 @@ def app():
             # load1_mag = st.number_input("Insert magnitude", value=None, placeholder="Type a text...")
             # load1_loc = st.slider("Load location", min_value=0.0, max_value=float(beam_length), step=0.1)
 
-            load_type = st.selectbox('Choose load type',('Point Load','Distributed Load','Point Torque'))
-            load_magnitude = st.number_input("Insert magnitude", value=None, placeholder="Type a number...")
-            load_location = st.slider("Load location", min_value=0.0, max_value=float(beam_length), step=0.1)
 
-            def add_load(load_list, load_container):
+            def add_load(load_list, load_type, load_magnitude, load_location):
                 load_list.append({
                     "type": load_type,
                     "magnitude": load_magnitude,
                     "location": load_location,
                     "delete": False  # Thêm trường để kiểm soát việc xoá
                 })
-                
-                # Tạo một ô trống mới để hiển thị khung nhập tiếp theo
-                st.session_state["load_magnitude"] = ""
-                
-                load_container.text("Load added successfully!")
+
+                # Đặt giá trị mặc định cho load_magnitude
+                st.session_state["load_magnitude"] = None
 
             # Khởi tạo danh sách để lưu trữ thông tin về các tải
-            loads = []
-            load_list = []
+            load_list = st.session_state.get("load_list", [])
 
-            # Tạo khung nhập cho tải mới
-            load_container = st.empty()
+            # Hiển thị nút "Add load" và các khung nhập
+            load_type = st.selectbox('Choose load type', ('Point Load', 'Distributed Load', 'Point Torque'))
+            load_magnitude = st.number_input("Insert magnitude", placeholder="Type a number...")
+            load_location = st.slider("Load location", min_value=0.0, max_value=float(beam_length), step=0.1)
 
-            # Hiển thị nút "Add load"
-            st.button("Add load", on_click=add_load())
+            # Nút "Add load"
+            if st.button("Add load"):
+                # Gọi hàm add_load khi nút được nhấn
+                add_load(load_list, load_type, load_magnitude, load_location)
+                st.session_state["load_magnitude"] = ""  # Gán giá trị mặc định cho load_magnitude
+                st.session_state["load_list"] = load_list  # Lưu trạng thái của load_list
                 
             # Hiển thị thông tin tải đã thêm và nút để xoá
             st.subheader("Added loads:")
-            for i, load in enumerate(loads, start=1):
-                delete_load = st.checkbox(f"Delete Load {i}")
-                
+            for i, load in enumerate(load_list, start=1):
+                delete_load = st.checkbox(f"Delete Load {i}", key=f"delete_load_{i}")
+
                 # Kiểm tra nếu nút xoá được chọn
                 if delete_load:
-                    loads[i - 1]["delete"] = True
+                    load["delete"] = True
+                else:
+                    load["delete"] = False
+                    st.write(f"Load {i}: Type - {load['type']}, Magnitude - {load['magnitude']}, Location - {load['location']}")
 
                 # Hiển thị thông tin tải nếu không được chọn để xoá
-                if not loads[i - 1]["delete"]:
-                    st.write(f"Load {i}: Type - {load['type']}, Magnitude - {load['magnitude']}, Location - {load['location']}")
+                # if not load["delete"]:
+                #     st.write(f"Load {i}: Type - {load['type']}, Magnitude - {load['magnitude']}, Location - {load['location']}")
 
 
         with col2:
